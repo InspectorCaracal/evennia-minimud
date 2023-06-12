@@ -15,6 +15,18 @@ own cmdsets by inheriting from them or directly from `evennia.CmdSet`.
 """
 
 from evennia import default_cmds
+from evennia.contrib.game_systems.clothing import ClothedCharacterCmdSet
+
+from evennia.contrib.game_systems.containers.containers import ContainerCmdSet
+from evennia.contrib.grid.xyzgrid.commands import XYZGridCmdSet
+from evennia.contrib.rpg.character_creator.character_creator import ContribCmdCharCreate
+from evennia.contrib.game_systems.crafting.crafting import CmdCraft
+
+
+from commands.combat import CombatCmdSet
+from commands.skills import SkillCmdSet
+from commands.interact import InteractCmdSet
+from commands.account import AccountOptsCmdSet
 
 
 class CharacterCmdSet(default_cmds.CharacterCmdSet):
@@ -34,6 +46,13 @@ class CharacterCmdSet(default_cmds.CharacterCmdSet):
         #
         # any commands you add below will overload the default ones.
         #
+        self.add(ClothedCharacterCmdSet)
+        self.add(ContainerCmdSet)
+        self.add(XYZGridCmdSet)
+        self.add(CmdCraft)
+        self.add(CombatCmdSet)
+        self.add(SkillCmdSet)
+        self.add(InteractCmdSet)
 
 
 class AccountCmdSet(default_cmds.AccountCmdSet):
@@ -54,6 +73,8 @@ class AccountCmdSet(default_cmds.AccountCmdSet):
         #
         # any commands you add below will overload the default ones.
         #
+        self.add(ContribCmdCharCreate)
+        self.add(AccountOptsCmdSet)
 
 
 class UnloggedinCmdSet(default_cmds.UnloggedinCmdSet):

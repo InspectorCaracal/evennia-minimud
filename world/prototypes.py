@@ -1,90 +1,352 @@
 """
 Prototypes
-
-A prototype is a simple way to create individualized instances of a
-given typeclass. It is dictionary with specific key names.
-
-For example, you might have a Sword typeclass that implements everything a
-Sword would need to do. The only difference between different individual Swords
-would be their key, description and some Attributes. The Prototype system
-allows to create a range of such Swords with only minor variations. Prototypes
-can also inherit and combine together to form entire hierarchies (such as
-giving all Sabres and all Broadswords some common properties). Note that bigger
-variations, such as custom commands or functionality belong in a hierarchy of
-typeclasses instead.
-
-A prototype can either be a dictionary placed into a global variable in a
-python module (a 'module-prototype') or stored in the database as a dict on a
-special Script (a db-prototype). The former can be created just by adding dicts
-to modules Evennia looks at for prototypes, the latter is easiest created
-in-game via the `olc` command/menu.
-
-Prototypes are read and used to create new objects with the `spawn` command
-or directly via `evennia.spawn` or the full path `evennia.prototypes.spawner.spawn`.
-
-A prototype dictionary have the following keywords:
-
-Possible keywords are:
-- `prototype_key` - the name of the prototype. This is required for db-prototypes,
-  for module-prototypes, the global variable name of the dict is used instead
-- `prototype_parent` - string pointing to parent prototype if any. Prototype inherits
-  in a similar way as classes, with children overriding values in their parents.
-- `key` - string, the main object identifier.
-- `typeclass` - string, if not set, will use `settings.BASE_OBJECT_TYPECLASS`.
-- `location` - this should be a valid object or #dbref.
-- `home` - valid object or #dbref.
-- `destination` - only valid for exits (object or #dbref).
-- `permissions` - string or list of permission strings.
-- `locks` - a lock-string to use for the spawned object.
-- `aliases` - string or list of strings.
-- `attrs` - Attributes, expressed as a list of tuples on the form `(attrname, value)`,
-  `(attrname, value, category)`, or `(attrname, value, category, locks)`. If using one
-   of the shorter forms, defaults are used for the rest.
-- `tags` - Tags, as a list of tuples `(tag,)`, `(tag, category)` or `(tag, category, data)`.
--  Any other keywords are interpreted as Attributes with no category or lock.
-   These will internally be added to `attrs` (equivalent to `(attrname, value)`.
-
-See the `spawn` command and `evennia.prototypes.spawner.spawn` for more info.
-
 """
+from random import randint
+import time
 
-## example of module-based prototypes using
-## the variable name as `prototype_key` and
-## simple Attributes
+### Crafted prototypes which might be useful to access in other places, such as shops
 
-# from random import randint
-#
-# GOBLIN = {
-# "key": "goblin grunt",
-# "health": lambda: randint(20,30),
-# "resists": ["cold", "poison"],
-# "attacks": ["fists"],
-# "weaknesses": ["fire", "light"],
-# "tags": = [("greenskin", "monster"), ("humanoid", "monster")]
-# }
-#
-# GOBLIN_WIZARD = {
-# "prototype_parent": "GOBLIN",
-# "key": "goblin wizard",
-# "spells": ["fire ball", "lighting bolt"]
-# }
-#
-# GOBLIN_ARCHER = {
-# "prototype_parent": "GOBLIN",
-# "key": "goblin archer",
-# "attacks": ["short bow"]
-# }
-#
-# This is an example of a prototype without a prototype
-# (nor key) of its own, so it should normally only be
-# used as a mix-in, as in the example of the goblin
-# archwizard below.
-# ARCHWIZARD_MIXIN = {
-# "attacks": ["archwizard staff"],
-# "spells": ["greater fire ball", "greater lighting"]
-# }
-#
-# GOBLIN_ARCHWIZARD = {
-# "key": "goblin archwizard",
-# "prototype_parent" : ("GOBLIN_WIZARD", "ARCHWIZARD_MIXIN")
-# }
+IRON_DAGGER = {
+    "typeclass": "typeclasses.weapons.MeleeWeapon",
+    "key": "iron dagger",
+    "desc": "A keen-edged dagger, made of iron.",
+    "tags": [
+        ("pierce", "damage_type"),
+        ("slash", "damage_type"),
+        ("knife", "crafting_tool"),
+    ],
+    "value": 20,
+    "speed": 3,
+    "dmg": 5,
+}
+
+IRON_SWORD = {
+    "typeclass": "typeclasses.weapons.MeleeWeapon",
+    "key": "iron sword",
+    "desc": "A one-handed sword made of iron.",
+    "tags": [("pierce", "damage_type"), ("slash", "damage_type")],
+    "value": 30,
+    "speed": 7,
+    "dmg": 10,
+}
+
+IRON_GREATSWORD = {
+    "typeclass": "typeclasses.weapons.MeleeWeapon",
+    "key": "iron greatsword",
+    "desc": "A two-handed iron greatsword.",
+    "tags": [
+        ("slash", "damage_type"),
+        ("bludgeon", "damage_type"),
+        ("two_handed", "wielded"),
+    ],
+    "value": 50,
+    "speed": 12,
+    "dmg": 15,
+}
+
+IRON_HAUBERK = {
+    "typeclass": "typeclasses.objects.ClothingObject",
+    "key": "iron hauberk",
+    "desc": "A standard iron chainmail tunic.",
+    "armor": 5,
+    "value": 20,
+    "clothing_type": "chestguard",
+}
+
+IRON_CHAUSSES = {
+    "typeclass": "typeclasses.objects.ClothingObject",
+    "key": "iron chausses",
+    "desc": "A pair of mail chausses constructed from iron.",
+    "armor": 5,
+    "value": 20,
+    "clothing_type": "legguard",
+}
+
+LEATHER_BOOTS = {
+    "typeclass": "typeclasses.objects.ClothingObject",
+    "key": "leather boots",
+    "desc": "A sturdy pair of leather boots.",
+    "armor": 1,
+    "value": 5,
+    "clothing_type": "shoes",
+}
+
+SMALL_BAG = {
+    "typeclass": "game_systems.containers.ContainerObject",
+    "key": "small bag",
+    "desc": "A small leather bag.",
+    "capacity": 5,
+    "value": 5,
+}
+MEDIUM_BAG = {
+    "typeclass": "game_systems.containers.ContainerObject",
+    "key": "medium bag",
+    "desc": "A medium leather bag.",
+    "capacity": 10,
+    "value": 15,
+}
+LARGE_BAG = {
+    "typeclass": "game_systems.containers.ContainerObject",
+    "key": "large bag",
+    "desc": "A large leather bag.",
+    "capacity": 20,
+    "value": 30,
+}
+
+### Shop Items
+
+PIE_SLICE = {
+    "key": "slice of $choice('apple', 'blueberry', 'peach', 'cherry', 'custard') pie",
+    "desc": "A single slice of freshly-baked pie.",
+    "tags": [
+        "edible",
+    ],
+    "energy": 5,
+    "value": 5,
+}
+
+WOOL_TUNIC = {
+    "typeclass": "typeclasses.objects.ClothingObject",
+    "key": "$choice('red', 'green', 'blue', 'brown', 'cream') tunic",
+    "desc": "A simple, but comfortable, woolen tunic.",
+    "value": 3,
+    "clothing_type": "top",
+}
+WOOL_LEGGINGS = {
+    "typeclass": "typeclasses.objects.ClothingObject",
+    "key": "$choice('red', 'green', 'blue', 'brown', 'cream') leggings",
+    "desc": "A pair of soft and durable woolen leggings.",
+    "value": 3,
+    "clothing_type": "legs",
+}
+
+### Crafting tools
+
+SMITHING_HAMMER = {
+    "key": "smithing hammer",
+    "desc": "A sturdy hammer for beating metal.",
+    "tags": [("hammer", "crafting_tool")],
+    "locks": "get:false()",
+}
+
+SMITHING_ANVIL = {
+    "key": "anvil",
+    "desc": "A typical anvil, which has clearly seen much use.",
+    "tags": [("anvil", "crafting_tool")],
+    "locks": "get:false()",
+}
+
+SMITHING_FURNACE = {
+    "key": "furnace",
+    "desc": "An active furnace, hot enough to melt down metals.",
+    "tags": [("furnace", "crafting_tool")],
+    "locks": "get:false()",
+}
+
+
+### Materials and their gather nodes
+
+IRON_ORE_NODE = {
+    "typeclass": "typeclasses.objects.GatherNode",
+    "key": "iron vein",
+    "desc": "An outcropping of rocks here appears to contain raw iron.",
+    "spawn_proto": "IRON_ORE",
+    "gathers": lambda: randint(2, 10),
+}
+IRON_ORE = {
+    "key": "iron ore",
+    "desc": "A clump of raw iron ore.",
+    "tags": [("iron ore", "crafting_material")],
+    "value": 2,
+}
+
+
+COPPER_ORE_NODE = {
+    "typeclass": "typeclasses.objects.GatherNode",
+    "key": "copper vein",
+    "desc": "An outcropping of rocks here appears to contain raw copper.",
+    "spawn_proto": "COPPER_ORE",
+    "gathers": lambda: randint(2, 10),
+}
+COPPER_ORE = {
+    "key": "copper ore",
+    "desc": "A clump of raw copper ore.",
+    "tags": [("copper ore", "crafting_material")],
+    "value": 1,
+}
+
+
+APPLE_TREE = {
+    "typeclass": "typeclasses.objects.GatherNode",
+    "key": "apple tree",
+    "desc": "A tree here is full of apples, some of which seem to be ripe.",
+    "spawn_proto": "APPLE",
+    "gathers": lambda: randint(5, 10),
+}
+APPLE = {
+    "key": "apple",
+    "desc": "A delicious multi-colored apple.",
+    "tags": [("apple", "crafting_material"), "edible"],
+    "nutrition": 5,
+    "value": 1,
+}
+
+
+LUMBER_TREE = {
+    "typeclass": "typeclasses.objects.GatherNode",
+    "key": "$choice('pine', 'oak', 'ash') tree",
+    "desc": "This tree looks like a great source of lumber.",
+    "spawn_proto": "WOOD_LOG",
+    "gathers": lambda: randint(2, 10),
+}
+WOOD_LOG = {
+    "key": "log of wood",
+    "desc": "A decent-sized wooden log. Not so big you can't carry it.",
+    "tags": [
+        ("wood", "crafting_material"),
+    ],
+    "value": 1,
+}
+
+
+DRIFTWOOD = {
+    "typeclass": "typeclasses.objects.GatherNode",
+    "key": "pile of driftwood",
+    "desc": "Some of this wood looks like it would be useful.",
+    "spawn_proto": "WOOD_LOG",
+    "gathers": lambda: randint(1, 3),
+}
+WOOD_LOG = {
+    "key": "log of wood",
+    "desc": "A decent-sized wooden log. Not so big you can't carry it.",
+    "tags": [
+        ("wood", "crafting_material"),
+    ],
+    "value": 1,
+}
+
+
+### Mobs
+
+ANGRY_BEAR = {
+    "typeclass": "typeclasses.characters.NPC",
+    "key": "a large angry bear",
+    "desc": "A large brown bear. It really doesn't like you!",
+    "gender": "neutral",
+    "react_as": "aggressive",
+    "flee_at": 5,
+    "name_color": "r",
+    "str": 15,
+    "natural_weapon": {
+        "name": "claws",
+        "damage_type": "slash",
+        "damage": 10,
+        "speed": 8,
+        "energy_cost": 10,
+    },
+    "exp_reward": 10,
+    # randomly generate a list of drop prototype keys when the mob is spawned
+    "drops": lambda: ["BEAR_MEAT"] * randint(3, 5) + ["ANIMAL_HIDE"] * randint(0, 5),
+    "can_attack": True,
+}
+
+COUGAR = {
+    "typeclass": "typeclasses.characters.NPC",
+    "key": "a mountain lion",
+    "desc": "A sleek mountain lion. It doesn't appreciate you invading its territory. At all.",
+    "gender": "neutral",
+    "react_as": "aggressive",
+    "flee_at": 15,
+    "name_color": "r",
+    "str": 8,
+    "agi": 15,
+    "natural_weapon": {
+        "name": "claws",
+        "damage_type": "slash",
+        "damage": 10,
+        "speed": 8,
+        "energy_cost": 10,
+    },
+    "exp_reward": 10,
+    # randomly generate a list of drop prototype keys when the mob is spawned
+    "drops": lambda: ["RAW_MEAT"] * randint(0, 3) + ["ANIMAL_HIDE"] * randint(0, 2),
+    "can_attack": True,
+}
+
+SQUIRREL = {
+    "typeclass": "typeclasses.characters.NPC",
+    "key": "a $choice('grey', 'brown') squirrel",
+    "desc": "Look! A squirrel!",
+    "react_as": "timid",
+    "gender": "neutral",
+    "drops": lambda: ["RAW_MEAT"] * randint(0, 1),
+    "can_attack": True,
+}
+
+PHEASANT = {
+    "typeclass": "typeclasses.characters.NPC",
+    "key": "a pheasant",
+    "desc": "A healthy wild pheasant.",
+    "react_as": "timid",
+    "gender": "neutral",
+    "drops": lambda: ["RAW_MEAT"] * randint(0, 1),
+    "can_attack": True,
+}
+
+DOE_DEER = {
+    "typeclass": "typeclasses.characters.NPC",
+    "key": "a doe",
+    "desc": "A skittish doe with large brown eyes.",
+    "gender": "female",
+    "react_as": "timid",
+    "agi": 15,
+    "can_attack": True,
+    # randomly generate a list of drop prototype keys when the mob is spawned
+    "drops": lambda: ["DEER_MEAT"] * randint(1, 3) + ["ANIMAL_HIDE"] * randint(0, 3),
+}
+
+STAG_DEER = {
+    "typeclass": "typeclasses.characters.NPC",
+    "key": "a stag",
+    "desc": "A wary adult stag, sporting a full rack of antlers.",
+    "gender": "male",
+    "agi": 15,
+    "natural_weapon": {
+        "name": "antlers",
+        "damage_type": "pierce",
+        "damage": 10,
+        "speed": 10,
+        "energy_cost": 5,
+    },
+    # randomly generate a list of drop prototype keys when the mob is spawned
+    "drops": lambda: ["DEER_MEAT"] * randint(1, 3)
+    + ["DEER_ANTLER"] * randint(0, 2)
+    + ["ANIMAL_HIDE"] * randint(0, 3),
+    "exp_reward": 10,
+    "can_attack": True,
+}
+
+### Mob drops
+
+RAW_MEAT = {
+    "key": "raw meat",
+    "desc": "A piece of meat from an animal. It hasn't been cooked.",
+    "tags": [("raw meat", "crafting_material")],
+}
+ANIMAL_HIDE = {
+    "key": "animal hide",
+    "desc": "A section of hide from an animal, suitable for leather-crafting",
+    "tags": [("leather", "crafting_material")],
+}
+DEER_MEAT = {
+    "key": "raw deer meat",
+    "desc": "A piece of meat from a deer. It hasn't been cooked.",
+    "tags": [("raw meat", "crafting_material"), ("venison", "crafting_material")],
+}
+DEER_ANTLER = {
+    "key": "antler",
+    "desc": "A forked antler bone from an adult stag.",
+    "tags": [
+        ("bone", "crafting_material"),
+    ],
+}

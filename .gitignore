@@ -25,6 +25,7 @@ __pycache__
 *.pid
 *.restart
 *.db3
+venv
 
 # Installation-specific.
 # For group efforts, comment out some or all of these.
@@ -32,6 +33,7 @@ server/conf/secret_settings.py
 server/logs/*.log.*
 server/.static/*
 server/.media/*
+server/.cache/*
 
 # Installer logs
 pip-log.txt
