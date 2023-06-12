@@ -22,10 +22,13 @@ several more options for customizing the Guest account system.
 
 """
 
-from evennia.accounts.accounts import DefaultAccount, DefaultGuest
+from evennia.accounts.accounts import DefaultGuest
+from evennia.contrib.rpg.character_creator.character_creator import (
+    ContribChargenAccount,
+)
 
 
-class Account(DefaultAccount):
+class Account(ContribChargenAccount):
     """
     This class describes the actual OOC account (i.e. the user connecting
     to the MUD). It does NOT have visual appearance in the game world (that
@@ -92,7 +95,10 @@ class Account(DefaultAccount):
 
     """
 
-    pass
+    def at_account_creation(self):
+        super().at_account_creation()
+        # Initialize game settings
+        self.db.settings = {"auto attack": True, "auto prompt": False}
 
 
 class Guest(DefaultGuest):

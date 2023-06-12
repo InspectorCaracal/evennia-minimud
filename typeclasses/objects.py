@@ -10,7 +10,12 @@ the other types, you can do so by adding this as a multiple
 inheritance.
 
 """
+from random import randint
+from evennia.prototypes import spawner, prototypes
 from evennia.objects.objects import DefaultObject
+from evennia.contrib.game_systems.clothing import ContribClothing
+
+from commands.interact import GatherCmdSet
 
 
 class ObjectParent:
@@ -171,4 +176,66 @@ class Object(ObjectParent, DefaultObject):
 
     """
 
+    def at_drop(self, dropper, **kwargs):
+        """
+        Make sure that wielded weapons are unwielded.
+        """
+        if self in dropper.wielding:
+            dropper.unwield(self)
+        super().at_drop(dropper, **kwargs)
+
+
+class ClothingObject(ObjectParent, ContribClothing):
     pass
+
+
+class GatherNode(Object):
+    """
+    An object which, when interacted with, allows a player to gather a material resource.
+    """
+
+    def at_object_creation(self):
+        """
+        Do some initial set-up
+        """
+        self.locks.add("get:false()")
+        self.cmdset.add_default(GatherCmdSet)
+
+    def get_display_footer(self, looker, **kwargs):
+        return "You can |wgather|n from this."
+
+    def at_gather(self, chara, **kwargs):
+        """
+        Creates the actual material object for the player to collect.
+        """
+        if not (proto_key := self.db.spawn_proto):
+            # somehow this node has no material to spawn
+            chara.msg(
+                f"The {self.get_display_name(chara)} disappears in a puff of confusion."
+            )
+            # get rid of ourself, since we're broken
+            self.delete()
+            return
+
+        if not (remaining := self.db.gathers):
+            # this node has been used up
+            chara.msg(f"There is none left.")
+            # get rid of ourself, since we're empty
+            self.delete()
+            return
+
+        # grab a randomized amount to spawn
+        amt = randint(1, min(remaining, 3))
+
+        # spawn the items!
+        objs = spawner.spawn(*[proto_key] * amt)
+        for obj in objs:
+            # move to the gathering character
+            obj.location = chara
+
+        if amt == remaining:
+            chara.msg(f"You collect the last {obj.get_numbered_name(amt, chara)[1]}.")
+            self.delete()
+        else:
+            chara.msg(f"You collect {obj.get_numbered_name(amt, chara)[1]}.")
+            self.db.gathers -= amt

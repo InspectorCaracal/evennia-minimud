@@ -1,0 +1,63 @@
+# initialize the overworld map
+py from world.maps import overworld; overworld.create()
+# move to the plaza
+tel (7, 3, townsburg)
+# create the exit for getting into town from the overworld
+create enter Townsburg;townsburg;enter:typeclasses.exits.Exit
+# link it to here
+link enter = here
+# move to a gate room
+tel (4, 5, townsburg)
+# create exit
+create/drop northwest;nw:typeclasses.exits.Exit
+# set the wilderness map
+set nw/wilderness_name = overworld
+# set the wilderness tile coords
+set nw/wilderness_coords = (50, 20)
+# move to the next gate room
+tel (7, 5, townsburg)
+# create exit
+create/drop north;n:typeclasses.exits.Exit
+# set the wilderness map
+set north/wilderness_name = overworld
+# set the wilderness tile coords
+set north/wilderness_coords = (50, 20)
+# move to the next gate room
+tel (1, 3, townsburg)
+# create exit
+create/drop west;w:typeclasses.exits.Exit
+# set the wilderness map
+set west/wilderness_name = overworld
+# set the wilderness tile coords
+set west/wilderness_coords = (50, 20)
+# move to the next gate room
+tel (13, 3, townsburg)
+# create exit
+create/drop east;e:typeclasses.exits.Exit
+# set the wilderness map
+set east/wilderness_name = overworld
+# set the wilderness tile coords
+set east/wilderness_coords = (50, 20)
+# move to the next gate room
+tel (8, 1, townsburg)
+# create exit
+create/drop southeast;se:typeclasses.exits.Exit
+# set the wilderness map
+set se/wilderness_name = overworld
+# set the wilderness tile coords
+set se/wilderness_coords = (50, 20)
+# move to the wilderness
+se
+# place the entrance to the town here
+drop enter
+
+# now we furnish some crafting rooms with some crafting tools
+# move to the smithy
+tel (9, 2, townsburg)
+# create a furnace
+spawn furnace
+# create an anvil
+spawn anvil
+# create a hammer
+spawn hammer
+# and we're done!

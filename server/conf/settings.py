@@ -4,7 +4,7 @@ Evennia settings file.
 The available options are found in the default settings file found
 here:
 
-D:\Sara\Code\evgames\demorpg\venv\lib\site-packages\evennia\settings_default.py
+D:\Sara\Code\evgames\envev\lib\site-packages\evennia\settings_default.py
 
 Remember:
 
@@ -32,8 +32,73 @@ from evennia.settings_default import *
 ######################################################################
 
 # This is the name of your game. Make it catchy!
-SERVERNAME = "evennia-minimud"
+SERVERNAME = "MiniMUD the RPG"
 
+
+######################################################################
+# Config for contrib packages
+######################################################################
+
+# XYZGrid - https://www.evennia.com/docs/latest/Contribs/Contrib-XYZGrid.html
+EXTRA_LAUNCHER_COMMANDS["xyzgrid"] = "evennia.contrib.grid.xyzgrid.launchcmd.xyzcommand"
+PROTOTYPE_MODULES += ["evennia.contrib.grid.xyzgrid.prototypes"]
+XYZROOM_PROTOTYPE_OVERRIDE = {"typeclass": "typeclasses.rooms.XYGridRoom"}
+XYZEXIT_PROTOTYPE_OVERRIDE = {"typeclass": "typeclasses.exits.XYGridExit"}
+
+
+# Clothing - https://www.evennia.com/docs/latest/Contribs/Contrib-Clothing.html#configuration
+CLOTHING_WEARSTYLE_MAXLENGTH = 40
+CLOTHING_TYPE_ORDERED = [
+    "hat",
+    "jewelry",
+    "chestguard",
+    "top",
+    "undershirt",
+    "bracers",
+    "gloves",
+    "fullbody",
+    "legguard",
+    "bottom",
+    "underpants",
+    "socks",
+    "shoes",
+    "accessory",
+]
+CLOTHING_TYPE_AUTOCOVER = {
+    "top": ["undershirt"],
+    "chestguard": ["top", "undershirt"],
+    "bottom": ["underpants"],
+    "legguard": ["bottom", "underpants"],
+    "fullbody": ["undershirt", "underpants"],
+    "shoes": ["socks"],
+}
+
+CLOTHING_TYPE_LIMIT = {
+    "chestguard": 1,
+    "legguard": 1,
+    "bracers": 1,
+    "hat": 1,
+    "gloves": 1,
+    "socks": 1,
+    "shoes": 1,
+}
+
+# Crafting - https://www.evennia.com/docs/latest/Contribs/Contrib-Crafting.html
+CRAFT_RECIPE_MODULES = [
+    "world.recipes.smithing",
+    "world.recipes.tailoring",
+    "world.recipes.cooking",
+]
+
+# Character Creation - https://www.evennia.com/docs/latest/Contribs/Contrib-Character-Creator.html
+CHARGEN_MENU = "world.chargen_menu"
+AUTO_CREATE_CHARACTER_WITH_ACCOUNT = False
+AUTO_PUPPET_ON_LOGIN = False
+MAX_NR_CHARACTERS = 3
+
+# EvMenu Login - https://www.evennia.com/docs/latest/Contribs/Contrib-Menu-Login.html
+CMDSET_UNLOGGEDIN = "evennia.contrib.base_systems.menu_login.UnloggedinCmdSet"
+CONNECTION_SCREEN_MODULE = "evennia.contrib.base_systems.menu_login.connection_screens"
 
 ######################################################################
 # Settings given in secret_settings.py override those in this file.
