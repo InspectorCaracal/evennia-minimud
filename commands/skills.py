@@ -41,7 +41,7 @@ class CmdStatSheet(Command):
         # display known skills
         self.msg("SKILLS")
         skills = []
-        for skill_key in sorted(SKILL_LIST.items()):
+        for skill_key in sorted(SKILL_DICT.items()):
             if skill := caller.traits.get(skill_key):
                 skills.append((skill.name, int(skill.value)))
         rows = list(zip(*skills))
