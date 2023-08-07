@@ -29,6 +29,8 @@ from evennia.settings_default import *
 # This is the name of your game. Make it catchy!
 SERVERNAME = "MiniMUD the RPG"
 
+# Defines the base character type as PlayerCharacter instead of Character
+BASE_CHARACTER_TYPECLASS = "typeclasses.characters.PlayerCharacter"
 
 ######################################################################
 # Config for contrib packages
