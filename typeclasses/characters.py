@@ -315,6 +315,11 @@ class PlayerCharacter(Character):
     The typeclass for all player characters, including special player-feedback features.
     """
 
+    def at_object_creation(self):
+        super().at_object_creation()
+        # initialize hands
+        self.db._wielded = {"left": None, "right": None}
+
     def get_display_name(self, looker, **kwargs):
         """
         Adds color to the display name.

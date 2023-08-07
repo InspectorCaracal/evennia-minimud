@@ -42,11 +42,11 @@ class TestCharacterHooks(EvenniaTest):
 class TestCharacterDisplays(EvenniaTest):
     def test_get_display_status(self):
         self.assertEqual(
-            "Char - Health 100.0% : Energy 100.0%",
+            "Char - Health 100.0% : Energy 100.0% : Focus 100.0%",
             self.char1.get_display_status(self.char2),
         )
         self.assertEqual(
-            "Health 100.0% : Energy 100.0%", self.char1.get_display_status(self.char1)
+            "Health 100.0% : Energy 100.0% : Focus 100.0%", self.char1.get_display_status(self.char1)
         )
 
 

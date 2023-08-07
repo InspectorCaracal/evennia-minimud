@@ -17,11 +17,6 @@ class TestSmithingRecipes(EvenniaTest):
         self.crafter.traits.smithing.base = 20
 
     def test_ingot(self):
-        tools, ingredients = smithing.SmeltRecipe.seed()
-        for obj in ingredients:
-            if obj.name == "Ore":
-                obj.name = "Iron ore"
-                obj.tags.add("iron", category=smithing.SmeltRecipe.material_type)
-
-        results = crafting.craft(self.crafter, "ingot", *tools, *ingredients)
+        tools, ingredients = smithing.SmeltIronRecipe.seed()
+        results = crafting.craft(self.crafter, "iron ingot", *tools, *ingredients)
         self.assertEqual(results[0].key, "iron ingot")
