@@ -1,13 +1,13 @@
 [project]
 name = "evennia-minimud"
-version = "1.0.0"
+version = "1.0.1"
 requires-python = ">=3.10"
 authors = [
     {name = "InspectorCaracal"}
 ]
 dependencies = [
     # General
-    "evennia == 2.0.1",
+    "evennia >= 2.2, <3.0",
     'pywin32; sys_platform=="win32"',
 
     # contrib requirements
