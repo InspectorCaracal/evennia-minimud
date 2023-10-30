@@ -256,6 +256,53 @@ class CmdFlee(Command):
                 self.msg(prompt=status)
 
 
+class CmdRespawn(Command):
+    """
+    Return to the center of town when defeated, with full health.
+
+    Usage:
+        respawn
+    """
+
+    key = "respawn"
+
+    def func(self):
+        caller = self.caller
+
+        if not caller.tags.has("unconscious"):
+            self.msg("You are not defeated.")
+            return
+        caller.respawn()
+
+
+class CmdRevive(Command):
+    """
+    Revive another player who has been defeated. They will recover partial health.
+
+    Usage:
+        revive <player>
+    """
+
+    key = "revive"
+
+    def func(self):
+        caller = self.caller
+
+        if not self.args:
+            self.msg("Revive who?")
+            return
+
+        target = caller.search(self.args.strip())
+        if not target:
+            return
+
+        if not target.tags.has("unconscious"):
+            self.msg(f"{target.get_display_name(caller)} is not defeated.")
+            return
+
+        target.revive(caller)
+
+
 class CmdStatus(Command):
     key = "status"
     aliases = ("hp", "stat")
@@ -284,4 +331,6 @@ class CombatCmdSet(CmdSet):
         self.add(CmdFlee)
         self.add(CmdWield)
         self.add(CmdUnwield)
+        self.add(CmdRevive)
+        self.add(CmdRespawn)
         self.add(CmdStatus)

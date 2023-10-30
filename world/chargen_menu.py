@@ -382,7 +382,7 @@ def menunode_end(caller, raw_string):
         obj.wear(char, True, quiet=True)
     # get start location
     if plaza := char.search("East half of a plaza", global_search=True, quiet=True):
-        char.db.prelogout_location = plaza[0]
+        char.home = plaza[0]
 
     # clear in-progress status
     caller.new_char.attributes.remove("chargen_step")

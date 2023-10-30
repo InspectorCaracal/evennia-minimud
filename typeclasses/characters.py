@@ -138,7 +138,9 @@ class Character(ObjectParent, ClothedCharacter):
         if self.traits.hp.current <= 0:
             self.tags.add("unconscious", category="status")
             self.tags.add("lying down", category="status")
-            self.msg("You fall unconscious.")
+            self.msg(
+                "You fall unconscious. You can |wrespawn|n or wait to be |wrevive|nd."
+            )
             if self.in_combat:
                 combat = self.location.scripts.get("combat")[0]
                 combat.remove_combatant(self)
@@ -309,6 +311,19 @@ class Character(ObjectParent, ClothedCharacter):
         """
         pass
 
+    def revive(self, reviver, **kwargs):
+        """
+        Revive a defeated character at partial health.
+        """
+        # this function receives the actor doing the revive so you could implement your own skill check
+        # however, we don't have any relevant skills
+        if self.tags.has("unconscious"):
+            self.tags.remove("unconscious")
+            self.tags.remove("lying down")
+            # this sets the current HP to 20% of the max, a.k.a. one fifth
+            self.traits.hp.current = self.traits.hp.current.max // 5
+            self.msg(prompt=self.get_display_status(self))
+
 
 class PlayerCharacter(Character):
     """
@@ -380,6 +395,16 @@ class PlayerCharacter(Character):
             if settings.get("auto attack") and (speed := weapon.speed):
                 # queue up next attack; use None for target to reference stored target on execution
                 delay(speed + 1, self.attack, None, weapon, persistent=True)
+
+    def respawn(self):
+        """
+        Resets the character back to the spawn point with full health.
+        """
+        self.tags.remove("unconscious", category="status")
+        self.tags.remove("lying down", category="status")
+        self.traits.hp.reset()
+        self.move_to(self.home)
+        self.msg(prompt=self.get_display_status(self))
 
 
 class NPC(Character):
