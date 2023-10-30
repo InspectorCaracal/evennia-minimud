@@ -36,10 +36,6 @@ class BareHand:
         Hit something with your fists!
         """
         damage = self.damage
-        # use your fisticuffs skill
-        result = wielder.use_skill(self.skill, speed=self.speed)
-        # apply the weapon damage as a modifier to skill
-        damage = damage * result
         # subtract the energy required to use this
         wielder.traits.ep.current -= self.energy_cost
         if not damage:
