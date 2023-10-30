@@ -60,4 +60,17 @@ spawn furnace
 spawn anvil
 # create a hammer
 spawn hammer
+
+# lastly, we set up the shop stocking
+# in the forge, first
+script/start here =
+# move to the tavern
+tel (9, 4, townsburg)
+# start all the scripts here too
+script/start here =
+# move to the general store
+tel (6, 4, townsburg)
+# start all the scripts here too
+script/start here =
+
 # and we're done!

@@ -121,7 +121,7 @@ class XYGridShop(XYGridRoom):
         """
         super().at_object_creation()
         # add the shopping commands to the room
-        self.cmdset.add_default(ShopCmdSet)
+        self.cmdset.add(ShopCmdSet, persistent=True)
         # create an invisible, inaccessible storage object
         self.db.storage = create.object(
             key="shop storage",
@@ -129,10 +129,7 @@ class XYGridShop(XYGridRoom):
             home=self,
             location=self,
         )
-        self.scripts.add(RestockScript, key="restock")
-        # this is a slightly hacky workaround to make sure that the first repeat happens
-        # AFTER the prototype spawner applies the inventory attribute
-        self.scripts.get("restock")[0].start(start_delay=10)
+        self.scripts.add(RestockScript, key="restock", autostart=False)
 
     def add_stock(self, obj):
         """
@@ -160,7 +157,7 @@ class XYGridTrain(XYGridRoom):
         """
         super().at_object_creation()
         # add the shopping commands to the room
-        self.cmdset.add_default(TrainCmdSet)
+        self.cmdset.add(TrainCmdSet, persistent=True)
 
 
 class XYZShopNTrain(XYGridTrain, XYGridShop):
