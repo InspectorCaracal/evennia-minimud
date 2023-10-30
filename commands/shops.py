@@ -198,9 +198,12 @@ class CmdSell(Command):
         for obj in objs:
             self.obj.add_stock(obj)
 
-        self.caller.db.coins += total
+        coins = self.caller.db.coins or 0
+        self.caller.db.coins = coins + total
 
-        self.msg(f"You exchange {total} coins for {obj_name}.")
+        self.msg(
+            f"You exchange {obj_name} for {total} coin{'' if total == 1 else 's'}."
+        )
 
 
 class ShopCmdSet(CmdSet):
@@ -212,3 +215,19 @@ class ShopCmdSet(CmdSet):
         self.add(CmdList)
         self.add(CmdBuy)
         self.add(CmdSell)
+
+
+class CmdMoney(Command):
+    """
+    View how many coins you have
+
+    Usage:
+        coins
+    """
+
+    key = "coins"
+    aliases = ("wallet", "money")
+
+    def func(self):
+        coins = self.caller.db.coins or "no"
+        self.msg(f"You have {coins} coin{'' if coins == 1 else 's'}.")

@@ -27,6 +27,7 @@ from commands.combat import CombatCmdSet
 from commands.skills import SkillCmdSet
 from commands.interact import InteractCmdSet
 from commands.account import AccountOptsCmdSet
+from commands.shops import CmdMoney
 
 
 class CharacterCmdSet(default_cmds.CharacterCmdSet):
@@ -47,6 +48,7 @@ class CharacterCmdSet(default_cmds.CharacterCmdSet):
         # any commands you add below will overload the default ones.
         #
         self.add(ClothedCharacterCmdSet)
+        self.add(CmdMoney)
         self.add(ContainerCmdSet)
         self.add(XYZGridCmdSet)
         self.add(CmdCraft)
