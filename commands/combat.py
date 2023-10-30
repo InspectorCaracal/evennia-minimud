@@ -23,6 +23,7 @@ class CmdAttack(Command):
 
     key = "attack"
     aliases = ("att", "hit", "shoot")
+    help_category = "combat"
 
     def parse(self):
         """
@@ -131,6 +132,7 @@ class CmdWield(Command):
 
     key = "wield"
     aliases = ("hold",)
+    help_category = "combat"
 
     def parse(self):
         """
@@ -192,6 +194,7 @@ class CmdUnwield(Command):
 
     key = "unwield"
     aliases = ("unhold",)
+    help_category = "combat"
 
     def func(self):
         caller = self.caller
@@ -218,6 +221,7 @@ class CmdFlee(Command):
     """
 
     key = "flee"
+    help_category = "combat"
 
     def func(self):
         caller = self.caller
@@ -265,6 +269,7 @@ class CmdRespawn(Command):
     """
 
     key = "respawn"
+    help_category = "combat"
 
     def func(self):
         caller = self.caller
@@ -284,6 +289,7 @@ class CmdRevive(Command):
     """
 
     key = "revive"
+    help_category = "combat"
 
     def func(self):
         caller = self.caller

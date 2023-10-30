@@ -13,6 +13,7 @@ class CmdList(Command):
 
     key = "list"
     aliases = ("browse",)
+    help_category = "here"
 
     def func(self):
         # verify that this shop has a storage box
@@ -57,6 +58,7 @@ class CmdBuy(Command):
 
     key = "buy"
     aliases = ("order", "purchase")
+    help_category = "here"
 
     def parse(self):
         """
@@ -145,6 +147,7 @@ class CmdSell(Command):
     """
 
     key = "sell"
+    help_category = "here"
 
     def parse(self):
         """
