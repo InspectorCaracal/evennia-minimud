@@ -6,7 +6,7 @@ from random import randint
 ### Crafted prototypes which might be useful to access in other places, such as shops
 
 IRON_DAGGER = {
-    "typeclass": "typeclasses.weapons.MeleeWeapon",
+    "typeclass": "typeclasses.gear.MeleeWeapon",
     "key": "iron dagger",
     "desc": "A keen-edged dagger, made of iron.",
     "tags": [
@@ -20,7 +20,7 @@ IRON_DAGGER = {
 }
 
 IRON_SWORD = {
-    "typeclass": "typeclasses.weapons.MeleeWeapon",
+    "typeclass": "typeclasses.gear.MeleeWeapon",
     "key": "iron sword",
     "desc": "A one-handed sword made of iron.",
     "tags": [("pierce", "damage_type"), ("slash", "damage_type")],
@@ -30,7 +30,7 @@ IRON_SWORD = {
 }
 
 IRON_GREATSWORD = {
-    "typeclass": "typeclasses.weapons.MeleeWeapon",
+    "typeclass": "typeclasses.gear.MeleeWeapon",
     "key": "iron greatsword",
     "desc": "A two-handed iron greatsword.",
     "tags": [
@@ -71,7 +71,7 @@ LEATHER_BOOTS = {
 }
 
 SMALL_BAG = {
-    "typeclass": "typeclasses.objects.WearableContainer",
+    "typeclass": "typeclasses.gear.WearableContainer",
     "key": "small bag",
     "desc": "A small leather bag.",
     "capacity": 10,
@@ -79,7 +79,7 @@ SMALL_BAG = {
     "clothing_type": "accessory",
 }
 MEDIUM_BAG = {
-    "typeclass": "typeclasses.objects.WearableContainer",
+    "typeclass": "typeclasses.gear.WearableContainer",
     "key": "medium bag",
     "desc": "A medium leather bag.",
     "capacity": 20,
@@ -87,7 +87,7 @@ MEDIUM_BAG = {
     "clothing_type": "accessory",
 }
 LARGE_BAG = {
-    "typeclass": "typeclasses.objects.WearableContainer",
+    "typeclass": "typeclasses.gear.WearableContainer",
     "key": "large bag",
     "desc": "A large leather bag.",
     "capacity": 30,

@@ -1,8 +1,9 @@
 from random import choice
 from evennia import AttributeProperty
 from evennia.utils import logger
+from evennia.contrib.game_systems.containers import ContribContainer
 
-from .objects import Object
+from .objects import Object, ClothingObject
 
 
 class BareHand:
@@ -119,3 +120,7 @@ class MeleeWeapon(Object):
             target.at_damage(wielder, damage, damage_type)
         wielder.msg(f"[ Cooldown: {self.speed} seconds ]")
         wielder.cooldowns.add("attack", self.speed)
+
+
+class WearableContainer(ContainerObject, ClothingObject):
+    pass
