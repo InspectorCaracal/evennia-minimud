@@ -14,6 +14,7 @@ from random import randint
 from evennia.prototypes import spawner, prototypes
 from evennia.objects.objects import DefaultObject
 from evennia.contrib.game_systems.clothing import ContribClothing
+from evennia.contrib.game_systems.containers import ContribContainer
 
 from commands.interact import GatherCmdSet
 
@@ -188,6 +189,8 @@ class Object(ObjectParent, DefaultObject):
 class ClothingObject(ObjectParent, ContribClothing):
     pass
 
+class WearableContainer(ContainerObject, ContribClothing):
+    pass
 
 class GatherNode(Object):
     """

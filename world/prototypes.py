@@ -16,7 +16,7 @@ IRON_DAGGER = {
     ],
     "value": 20,
     "speed": 3,
-    "dmg": 5,
+    "dmg": 20,
 }
 
 IRON_SWORD = {
@@ -26,7 +26,7 @@ IRON_SWORD = {
     "tags": [("pierce", "damage_type"), ("slash", "damage_type")],
     "value": 30,
     "speed": 7,
-    "dmg": 10,
+    "dmg": 40,
 }
 
 IRON_GREATSWORD = {
@@ -40,14 +40,14 @@ IRON_GREATSWORD = {
     ],
     "value": 50,
     "speed": 12,
-    "dmg": 15,
+    "dmg": 60,
 }
 
 IRON_HAUBERK = {
     "typeclass": "typeclasses.objects.ClothingObject",
     "key": "iron hauberk",
     "desc": "A standard iron chainmail tunic.",
-    "armor": 5,
+    "armor": 8,
     "value": 20,
     "clothing_type": "chestguard",
 }
@@ -56,7 +56,7 @@ IRON_CHAUSSES = {
     "typeclass": "typeclasses.objects.ClothingObject",
     "key": "iron chausses",
     "desc": "A pair of mail chausses constructed from iron.",
-    "armor": 5,
+    "armor": 8,
     "value": 20,
     "clothing_type": "legguard",
 }
@@ -71,25 +71,28 @@ LEATHER_BOOTS = {
 }
 
 SMALL_BAG = {
-    "typeclass": "game_systems.containers.ContainerObject",
+    "typeclass": "typeclasses.objects.WearableContainer",
     "key": "small bag",
     "desc": "A small leather bag.",
-    "capacity": 5,
+    "capacity": 10,
     "value": 5,
+    "clothing_type": "accessory",
 }
 MEDIUM_BAG = {
-    "typeclass": "game_systems.containers.ContainerObject",
+    "typeclass": "typeclasses.objects.WearableContainer",
     "key": "medium bag",
     "desc": "A medium leather bag.",
-    "capacity": 10,
+    "capacity": 20,
     "value": 15,
+    "clothing_type": "accessory",
 }
 LARGE_BAG = {
-    "typeclass": "game_systems.containers.ContainerObject",
+    "typeclass": "typeclasses.objects.WearableContainer",
     "key": "large bag",
     "desc": "A large leather bag.",
-    "capacity": 20,
+    "capacity": 30,
     "value": 30,
+    "clothing_type": "accessory",
 }
 
 ### Shop Items
@@ -234,6 +237,7 @@ ANGRY_BEAR = {
     "gender": "neutral",
     "react_as": "aggressive",
     "flee_at": 5,
+    "armor": 20,
     "name_color": "r",
     "str": 15,
     "natural_weapon": {
@@ -256,6 +260,7 @@ COUGAR = {
     "gender": "neutral",
     "react_as": "aggressive",
     "flee_at": 15,
+    "armor": 15,
     "name_color": "r",
     "str": 8,
     "agi": 15,
@@ -298,6 +303,7 @@ DOE_DEER = {
     "desc": "A skittish doe with large brown eyes.",
     "gender": "female",
     "react_as": "timid",
+    "armor": 10,
     "agi": 15,
     "can_attack": True,
     # randomly generate a list of drop prototype keys when the mob is spawned
@@ -309,6 +315,7 @@ STAG_DEER = {
     "key": "a stag",
     "desc": "A wary adult stag, sporting a full rack of antlers.",
     "gender": "male",
+    "armor": 10,
     "agi": 15,
     "natural_weapon": {
         "name": "antlers",

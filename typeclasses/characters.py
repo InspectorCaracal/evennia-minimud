@@ -12,7 +12,7 @@ from evennia.contrib.game_systems.cooldowns import CooldownHandler
 from .objects import ObjectParent
 
 _IMMOBILE = ("sitting", "lying down", "unconscious")
-
+_MAX_CAPCITY = 10
 
 class Character(ObjectParent, ClothedCharacter):
     """
@@ -73,8 +73,12 @@ class Character(ObjectParent, ClothedCharacter):
         ]
 
     def defense(self, damage_type=None):
-        """Get the total armor defense from equipped items"""
-        return sum([obj.attributes.get("armor", 0) for obj in get_worn_clothes(self)])
+        """
+        Get the total armor defense from equipped items and natural defenses
+        
+        The damage_type keyword is unused by default.
+        """
+        return sum([obj.attributes.get("armor", 0) for obj in get_worn_clothes(self) + [self]])
 
     def at_object_creation(self):
         # basic stats
@@ -131,8 +135,8 @@ class Character(ObjectParent, ClothedCharacter):
         Apply damage, after taking into account damage resistances.
         """
         # apply armor damage reduction
-        damage -= max(self.defense(damage_type), 0)
-        self.traits.hp.current -= damage
+        damage -= self.defense(damage_type)
+        self.traits.hp.current -= max(damage, 0)
         self.msg(f"You take {damage} damage from {attacker.get_display_name(self)}.")
         attacker.msg(f"You deal {damage} damage to {self.get_display_name(attacker)}.")
         if self.traits.hp.value <= 0:
@@ -346,6 +350,18 @@ class PlayerCharacter(Character):
             # special color for our own name
             return f"|c{name}|n"
         return f"|g{name}|n"
+
+    def at_pre_object_receive(self, object, source_location, **kwargs):
+        """
+        Called before picking something up or being given something. If this returns
+        False, the move is immediately cancelled.
+        """
+        # check if we have any statuses that prevent us from moving
+        if len([obj for obj in self.contents if not obj.db.worn]) > _MAX_CAPACITY:
+            self.msg("You can't carry any more things.")
+            source_location.msg(f"{self.get_display_name(source_location)} can't carry any more things.")
+            return False
+        return super().at_pre_object_receive(object, source_location, **kwargs)
 
     def at_damage(self, attacker, damage, damage_type=None):
         super().at_damage(attacker, damage, damage_type=damage_type)
