@@ -175,9 +175,11 @@ class CmdWield(Command):
         # try to wield the weapon
         held_in = caller.at_wield(weapon, hand=hand)
         if held_in:
+            hand = "hand" if len(held_in) == 1 else "hands"
             # success!
             self.caller.at_emote(
-                f"$conj(wields) the {{weapon}} in $your() {iter_to_str(held_in)}."
+                f"$conj(wields) the {{weapon}} in $pron(your) {iter_to_str(held_in)} {hand}.",
+                mapping={"weapon": weapon},
             )
 
 
@@ -207,8 +209,10 @@ class CmdUnwield(Command):
         freed_hands = caller.at_unwield(weapon)
         if freed_hands:
             # success!
+            hand = "hand" if len(freed_hands) == 1 else "hands"
             self.caller.at_emote(
-                f"$conj(releases) the {{weapon}} from $your() {iter_to_str(freed_hands)}."
+                f"$conj(releases) the {{weapon}} from $pron(your) {iter_to_str(freed_hands)} {hand}.",
+                mapping={"weapon": weapon},
             )
 
 
