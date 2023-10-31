@@ -274,7 +274,7 @@ class CmdRespawn(Command):
     def func(self):
         caller = self.caller
 
-        if not caller.tags.has("unconscious"):
+        if not caller.tags.has("unconscious", category="status"):
             self.msg("You are not defeated.")
             return
         caller.respawn()
@@ -302,7 +302,7 @@ class CmdRevive(Command):
         if not target:
             return
 
-        if not target.tags.has("unconscious"):
+        if not target.tags.has("unconscious", category="status"):
             self.msg(f"{target.get_display_name(caller)} is not defeated.")
             return
 

@@ -131,16 +131,17 @@ class Character(ObjectParent, ClothedCharacter):
         Apply damage, after taking into account damage resistances.
         """
         # apply armor damage reduction
-        damage -= self.defense(damage_type)
+        damage -= max(self.defense(damage_type), 0)
         self.traits.hp.current -= damage
         self.msg(f"You take {damage} damage from {attacker.get_display_name(self)}.")
         attacker.msg(f"You deal {damage} damage to {self.get_display_name(attacker)}.")
-        if self.traits.hp.current <= 0:
+        if self.traits.hp.value <= 0:
             self.tags.add("unconscious", category="status")
             self.tags.add("lying down", category="status")
             self.msg(
                 "You fall unconscious. You can |wrespawn|n or wait to be |wrevive|nd."
             )
+            self.traits.hp.rate = 0
             if self.in_combat:
                 combat = self.location.scripts.get("combat")[0]
                 combat.remove_combatant(self)
@@ -323,6 +324,7 @@ class Character(ObjectParent, ClothedCharacter):
             # this sets the current HP to 20% of the max, a.k.a. one fifth
             self.traits.hp.current = self.traits.hp.current.max // 5
             self.msg(prompt=self.get_display_status(self))
+            self.traits.hp.rate = 0.1
 
 
 class PlayerCharacter(Character):
@@ -403,6 +405,7 @@ class PlayerCharacter(Character):
         self.tags.remove("unconscious", category="status")
         self.tags.remove("lying down", category="status")
         self.traits.hp.reset()
+        self.traits.hp.rate = 0.1
         self.move_to(self.home)
         self.msg(prompt=self.get_display_status(self))
 
@@ -473,7 +476,7 @@ class NPC(Character):
                 self.delete()
                 return
 
-        if "timid" in self.db.react_as:
+        if "timid" in self.attributes.get("react_as", ""):
             self.at_emote("flees!")
             self.db.fleeing = True
             if combat_script := self.location.scripts.get("combat"):
@@ -494,9 +497,10 @@ class NPC(Character):
             self.execute_cmd("flee")
 
         # change target to the attacker
-        self.db.combat_target = attacker
-        if not self.in_combat:
+        if not self.db.combat_target:
             self.enter_combat(attacker)
+        else:
+            self.db.combat_target = attacker
 
     def enter_combat(self, target, **kwargs):
         """

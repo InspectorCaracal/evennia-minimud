@@ -2,7 +2,6 @@
 Prototypes
 """
 from random import randint
-import time
 
 ### Crafted prototypes which might be useful to access in other places, such as shops
 
