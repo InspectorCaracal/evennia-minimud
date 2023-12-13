@@ -1,6 +1,6 @@
 [project]
 name = "evennia-minimud"
-version = "1.0.1"
+version = "1.1.0"
 requires-python = ">=3.10"
 authors = [
     {name = "InspectorCaracal"}
