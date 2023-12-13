@@ -4,7 +4,7 @@ from evennia.utils import iter_to_str
 from evennia.utils.evtable import EvTable
 
 from .command import Command
-from typeclasses.weapons import BareHand
+from typeclasses.gear import BareHand
 
 
 class CmdAttack(Command):
