@@ -1,6 +1,6 @@
 from collections import Counter
 from evennia import CmdSet
-from evennia.utils import make_iter
+from evennia.utils import iter_to_str, make_iter
 from evennia.utils.evtable import EvTable
 
 from .command import Command
@@ -117,7 +117,7 @@ class CmdBuy(Command):
             return
 
         # confirm that this is what the player wants to buy
-        confirm = yield (f"Do you want to buy {obj_name} for {total}? Yes/No")
+        confirm = yield (f"Do you want to buy {obj_name} for {total} coin{'' if total == 1 else 's'}? Yes/No")
 
         # if it's not a form of yes, cancel
         if confirm.lower().strip() not in ("yes", "y"):
@@ -130,7 +130,7 @@ class CmdBuy(Command):
 
         self.caller.db.coins -= total
 
-        self.msg(f"You exchange {total} coins for {count} {obj_name}.")
+        self.msg(f"You exchange {total} coin{'' if total == 1 else 's'} for {count} {obj_name}.")
 
 
 class CmdSell(Command):
@@ -190,7 +190,7 @@ class CmdSell(Command):
         total = sum([obj.attributes.get("value", 0) for obj in objs])
 
         # confirm that this is what the player wants to buy
-        confirm = yield (f"Do you want to sell {obj_name} for {total}? Yes/No")
+        confirm = yield (f"Do you want to sell {obj_name} for {total} coin{'' if total == 1 else 's'}? Yes/No")
 
         # if it's not a form of yes, cancel
         if confirm.lower().strip() not in ("yes", "y"):
@@ -209,6 +209,91 @@ class CmdSell(Command):
         )
 
 
+class CmdDonate(Command):
+    """
+    Donate resources here in exchange for experience.
+
+    Enter "donate" by itself to see what kinds of resources are accepted.
+
+    Usage:
+        donate [quantity] <object>
+
+    Example:
+        donate 5 apple
+    """
+
+    key = "donate"
+
+    def parse(self):
+        """
+        Parse out the optional number of units for the command
+        """
+        self.args = self.args.strip()
+        if not self.args:
+            return
+        # this splits the args at the first space into a string and a possibly-empty list of strings
+        first, *rest = self.args.split(" ", maxsplit=1)
+
+        # if the rest is empty, we assume it's just an object name
+        if not rest:
+            self.count = 1
+        # is the first item a number?
+        elif first.isdecimal():
+            self.count = int(first)
+            # combine the rest back into a string
+            self.args = " ".join(rest)
+        else:
+            # the first word is not a number, so it's all just one object
+            self.count = 1
+
+    def func(self):
+        # verify that this shop has a storage box
+        if not (donations := self.obj.db.donation_tags):
+            self.msg("This shop does not accept donations.")
+            return
+
+        if not self.args:
+            # report back what this shop accepts
+            self.msg(f"You can donate {iter_to_str(donations)} here.")
+            return
+
+        # filter possible donatable objects by the types accepted here
+        candidates = [obj for obj in self.caller.contents if obj.tags.has(donations, category="crafting_material")]
+
+        # we want a stack of the item, matching the parsed count
+        objs = self.caller.search(self.args, candidates=candidates, stacked=self.count)
+        if not objs:
+            # we found nothing, or it was too vague of a search
+            return
+
+        # make the result into a list so we can handle it consistently
+        objs = make_iter(objs)
+        example = objs[0]
+        count = len(objs)
+        obj_name = example.get_numbered_name(count, self.caller)[1]
+        # calculate the total for all the objects
+        total = sum([obj.attributes.get("value", 0) for obj in objs]) // 2
+
+        # confirm that this is what the player wants to buy
+        confirm = yield (f"Do you want to trade in {obj_name} for {total} experience? Yes/No")
+
+        # if it's not a form of yes, cancel
+        if confirm.lower().strip() not in ("yes", "y"):
+            self.msg("Donation cancelled.")
+            return
+
+        # everything is good! do a capitalism!
+        for obj in objs:
+            obj.delete()
+
+        exp = self.caller.db.exp or 0
+        self.caller.db.exp = exp + total
+
+        self.msg(
+            f"You exchange {obj_name} for {total} experience."
+        )
+
+
 class ShopCmdSet(CmdSet):
     key = "Shop CmdSet"
 
@@ -218,6 +303,7 @@ class ShopCmdSet(CmdSet):
         self.add(CmdList)
         self.add(CmdBuy)
         self.add(CmdSell)
+        self.add(CmdDonate)
 
 
 class CmdMoney(Command):

@@ -1,7 +1,7 @@
 """
 Prototypes
 """
-from random import randint
+from random import randint, choice
 
 ### Crafted prototypes which might be useful to access in other places, such as shops
 
@@ -15,6 +15,7 @@ IRON_DAGGER = {
         ("knife", "crafting_tool"),
     ],
     "value": 20,
+    "energy_cost": 3,
     "speed": 3,
     "dmg": 20,
 }
@@ -25,6 +26,7 @@ IRON_SWORD = {
     "desc": "A one-handed sword made of iron.",
     "tags": [("pierce", "damage_type"), ("slash", "damage_type")],
     "value": 30,
+    "energy_cost": 5,
     "speed": 7,
     "dmg": 40,
 }
@@ -39,6 +41,7 @@ IRON_GREATSWORD = {
         ("two_handed", "wielded"),
     ],
     "value": 50,
+    "energy_cost": 10,
     "speed": 12,
     "dmg": 60,
 }
@@ -95,6 +98,16 @@ LARGE_BAG = {
     "clothing_type": "accessory",
 }
 
+PIE_CRUST = {
+    "key": "a pie crust",
+    "desc": "A golden brown, but empty, pie crust.",
+    "tags": [
+        "edible",
+    ],
+    "energy": 1,
+    "value": 10,
+}
+
 ### Shop Items
 
 PIE_SLICE = {
@@ -145,6 +158,13 @@ SMITHING_FURNACE = {
     "locks": "get:false()",
 }
 
+COOKING_OVEN = {
+    "key": "oven",
+    "desc": "A cast iron stove - or is it an oven? Well, it's hot and you can cook on it.",
+    "tags": [("oven", "crafting_tool"),("stove", "crafting_tool")],
+    "locks": "get:false()",
+}
+
 
 ### Materials and their gather nodes
 
@@ -178,20 +198,65 @@ COPPER_ORE = {
 }
 
 
-APPLE_TREE = {
+FRUIT_TREE = {
     "typeclass": "typeclasses.objects.GatherNode",
-    "key": "apple tree",
-    "desc": "A tree here is full of apples, some of which seem to be ripe.",
-    "spawn_proto": "APPLE",
+    "key": "fruit tree",
+    "desc": "A tree here is full of fruit, some of which seem to be ripe.",
+    "spawn_proto": lambda: choice(("APPLE_FRUIT", "PEAR_FRUIT", "PLUM_FRUIT")),
     "gathers": lambda: randint(5, 10),
 }
-APPLE = {
+APPLE_FRUIT = {
     "key": "apple",
     "desc": "A delicious multi-colored apple.",
-    "tags": [("apple", "crafting_material"), "edible"],
-    "nutrition": 5,
+    "tags": [("apple", "crafting_material"), ("fruit", "crafting_material"), "edible"],
+    "energy": 5,
     "value": 1,
 }
+PEAR_FRUIT = {
+    "key": "pear",
+    "desc": "A fragant golden pear.",
+    "tags": [("pear", "crafting_material"), ("fruit", "crafting_material"), "edible"],
+    "energy": 5,
+    "value": 1,
+}
+PLUM_FRUIT = {
+    "key": "plum",
+    "desc": "A large red-black plum.",
+    "tags": [("plum", "crafting_material"), ("fruit", "crafting_material"), "edible"],
+    "energy": 5,
+    "value": 1,
+}
+
+
+BERRY_BUSH = {
+    "typeclass": "typeclasses.objects.GatherNode",
+    "key": "berry bush",
+    "desc": "A few bushes nearby are covered in berries",
+    "spawn_proto": lambda: choice(("BLACKBERRY", "BLUEBERRY", "RASPBERRY")),
+    "gathers": lambda: randint(5, 10),
+}
+BLACKBERRY = {
+    "key": "blackberry",
+    "desc": "A juicy blackberry.",
+    "tags": [("blackberry", "crafting_material"), ("berry", "crafting_material"), ("fruit", "crafting_material"), "edible"],
+    "energy": 1,
+    "value": 0,
+}
+BLUEBERRY = {
+    "key": "blueberry",
+    "desc": "A single blueberry.",
+    "tags": [("blueberry", "crafting_material"), ("berry", "crafting_material"), ("fruit", "crafting_material"), "edible"],
+    "energy": 1,
+    "value": 0,
+}
+RASPBERRY = {
+    "key": "raspberry",
+    "desc": "A large red raspberry.",
+    "tags": [("raspberry", "crafting_material"), ("berry", "crafting_material"), ("fruit", "crafting_material"), "edible"],
+    "energy": 1,
+    "value": 0,
+}
+
 
 
 LUMBER_TREE = {

@@ -9,6 +9,7 @@ SKILL_DICT = {
     "evasion": "agi",
     "daggers": "agi",
     "swords": "str",
+    "cooking": "will",
 }
 
 
@@ -26,6 +27,7 @@ class CmdStatSheet(Command):
         self.msg(f"|w{caller.name}|n")
         # display current status
         self.msg(caller.get_display_status(caller))
+        self.msg(f"EXP: {caller.db.exp or 0}")
 
         # display the primary stats
         self.msg("STATS")
@@ -41,10 +43,12 @@ class CmdStatSheet(Command):
         # display known skills
         self.msg("SKILLS")
         skills = []
-        for skill_key in sorted(SKILL_DICT.items()):
+        for skill_key in sorted(SKILL_DICT.keys()):
             if skill := caller.traits.get(skill_key):
                 skills.append((skill.name, int(skill.value)))
         rows = list(zip(*skills))
+        if not rows:
+            self.msg("(None)")
         table = EvTable(table=rows, border="none")
         self.msg(str(table))
 
@@ -93,6 +97,7 @@ class CmdTrainSkill(Command):
             levels = int(self.args.strip())
         except ValueError:
             self.msg("Usage: train <levels>")
+            return
 
         if not (caller_xp := caller.db.exp):
             self.msg("You do not have any experience.")
@@ -107,7 +112,7 @@ class CmdTrainSkill(Command):
                 return
 
             confirm = yield (
-                f"It will cost you {exp_cost} to learn {to_train} up to level {levels}. Confirm? Yes/No"
+                f"It will cost you {exp_cost} experience to learn {to_train} up to level {levels}. Confirm? Yes/No"
             )
             if confirm.lower() not in (
                 "yes",
@@ -128,11 +133,11 @@ class CmdTrainSkill(Command):
             exp_cost = self._calc_exp(skill.base, levels)
             if caller_xp < exp_cost:
                 self.msg(
-                    f"You do not have enough experience - you need {exp_cost} to increase your {to_train} by {levels} levels."
+                    f"You do not have enough experience - you need {exp_cost} experience to increase your {to_train} by {levels} levels."
                 )
                 return
             confirm = yield (
-                f"It will cost you {exp_cost} to improve your {to_train} by {levels} levels. Confirm? Yes/No"
+                f"It will cost you {exp_cost} experience to improve your {to_train} by {levels} levels. Confirm? Yes/No"
             )
             if confirm.lower() not in (
                 "yes",
@@ -141,6 +146,7 @@ class CmdTrainSkill(Command):
                 self.msg("Cancelled.")
                 return
 
+        caller.db.exp -= exp_cost
         skill.base += levels
         self.msg(f"You practice your {to_train} and improve it to level {skill.base}.")
 

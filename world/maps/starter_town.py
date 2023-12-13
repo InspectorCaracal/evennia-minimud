@@ -125,21 +125,23 @@ PROTOTYPES = {
         "key": "A forge",
         "desc": "A dimly smithing forge, heated to shirtless temps by a furnace all year round.",
         "skill_training": "smithing",
+        "donation_tags": ["wood", "ore", "bone"],
         "inventory": [
-            ("IRON_CHAUSSES", 6),
-            ("IRON_HAUBERK", 6),
             ("IRON_DAGGER", 6),
             ("IRON_SWORD", 6),
-            ("IRON_GREATSWORD", 6),
         ],
     },
     (10, 4): {
         "prototype_parent": "xyz_room",
-        "typeclass": "typeclasses.rooms.XYGridTrain",
+        "typeclass": "typeclasses.rooms.XYZShopNTrain",
         "tags": [("townsburg", "zone")],
         "key": "A kitchen",
         "desc": "The kitchens for the tavern next door.",
         "skill_training": "cooking",
+        "donation_tags": ["fruit", "raw meat", "cooked meat"],
+        "inventory": [
+            ("PIE_CRUST", 4),
+        ],
     },
     (11, 4): {
         "prototype_parent": "xyz_room",

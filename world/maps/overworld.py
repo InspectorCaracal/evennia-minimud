@@ -47,8 +47,9 @@ MAP_KEY = {
         "biome": "forest",
         "desc": "There are many trees here.",
         "gathers": (
-            ("APPLE_TREE", 1),
+            ("FRUIT_TREE", 1),
             ("LUMBER_TREE", 5),
+            ("BERRY_BUSH", 3),
         ),
         "node cap": 10,
         "mobs": (("DOE_DEER", 3), ("STAG_DEER", 1), ("SQUIRREL", 5)),
@@ -58,8 +59,7 @@ MAP_KEY = {
         "biome": "grass",
         "desc": "A grassy meadow.",
         "gathers": (
-            ("APPLE_TREE", 1),
-            ("LUMBER_TREE", 5),
+            ("BERRY_BUSH", 3),
         ),
         "node cap": 10,
         "mobs": (("DOE_DEER", 3), ("STAG_DEER", 1), ("PHEASANT", 10)),
@@ -73,7 +73,11 @@ MAP_KEY = {
     "^": {
         "biome": "mountains",
         "desc": "The ground slopes sharply, littered with rocks and boulders.",
-        "gathers": (("IRON_ORE_NODE", 1), ("COPPER_ORE_NODE", 5)),
+        "gathers": (
+        ("IRON_ORE_NODE", 1),
+        ("COPPER_ORE_NODE", 5),
+            ("BERRY_BUSH", 1),
+        ),
         "node cap": 25,
         "mobs": (("ANGRY_BEAR", 1), ("COUGAR", 5)),
         "mob cap": 15,

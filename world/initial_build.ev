@@ -60,10 +60,17 @@ spawn furnace
 spawn anvil
 # create a hammer
 spawn hammer
-
-# lastly, we set up the shop stocking
-# in the forge, first
+# this is also a shop, so initialize the shop stock
 script/start here =
+
+# move to the kitchen
+tel (10, 4, townsburg)
+# create an oven
+spawn oven
+# initialize this shop stock too
+script/start here =
+
+# finish off the rest of the shop stocking
 # move to the tavern
 tel (9, 4, townsburg)
 # start all the scripts here too
