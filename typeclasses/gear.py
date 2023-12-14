@@ -122,5 +122,5 @@ class MeleeWeapon(Object):
         wielder.cooldowns.add("attack", self.speed)
 
 
-class WearableContainer(ContainerObject, ClothingObject):
+class WearableContainer(ContribContainer, ClothingObject):
     pass
