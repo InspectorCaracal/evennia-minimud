@@ -50,7 +50,7 @@ evennia start
 git clone https://github.com/InspectorCaracal/evennia-minimud.git
 cd evennia-minimud
 python -m venv venv
-./venv/scripts/activate
+source venv/bin/activate
 pip install .
 evennia migrate
 evennia start
