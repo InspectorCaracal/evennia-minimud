@@ -11,7 +11,7 @@ dependencies = [
     'pywin32; sys_platform=="win32"',
 
     # contrib requirements
-    "scipy"
+    "scipy == 1.9.3"
 ]
 
 [tool.setuptools]
