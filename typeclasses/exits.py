@@ -38,6 +38,7 @@ class Exit(ObjectParent, DefaultExit):
                                         defined, in which case that will simply be echoed.
     """
 
+
     def at_traverse(self, traveller, destination, **kwargs):
         """
         A customized version of exit traversal that allows you to travel into a wilderness.
@@ -89,6 +90,11 @@ class OverworldExit(ObjectParent, wilderness.WildernessExit):
             # they moved to a new place! call the hook
             traveller.location.at_object_receive(traveller, self.location)
 
+    def at_traverse_coordinates(self, traveller, coordinates, new_coordinates, **kwargs):
+        """
+        Stop an admin from being able to walk in a direction that doesn't exist.
+        """
+        return self.location.wilderness.is_valid_coordinates(new_coordinates)
 
 class XYGridExit(ObjectParent, XYZExit):
     """
