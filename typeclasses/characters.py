@@ -12,7 +12,7 @@ from evennia.contrib.game_systems.cooldowns import CooldownHandler
 from .objects import ObjectParent
 
 _IMMOBILE = ("sitting", "lying down", "unconscious")
-_MAX_CAPCITY = 10
+_MAX_CAPACITY = 10
 
 class Character(ObjectParent, ClothedCharacter):
     """
