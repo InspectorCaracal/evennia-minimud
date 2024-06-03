@@ -37,8 +37,8 @@ First, you need to install Python 3.11 and have git in your command line. Then, 
 ```
 git clone https://github.com/InspectorCaracal/evennia-minimud.git
 cd evennia-minimud
-py -m venv venv
-venv\Scripts\activate
+py -m venv .venv
+.venv\Scripts\activate
 pip install .
 py -m evennia
 evennia migrate
@@ -49,8 +49,8 @@ evennia start
 ```
 git clone https://github.com/InspectorCaracal/evennia-minimud.git
 cd evennia-minimud
-python -m venv venv
-source venv/bin/activate
+python -m venv .venv
+source .venv/bin/activate
 pip install .
 evennia migrate
 evennia start

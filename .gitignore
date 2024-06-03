@@ -26,7 +26,7 @@ __pycache__
 *.restart
 *.db3
 venv
-
+.venv
 # Installation-specific.
 # For group efforts, comment out some or all of these.
 server/conf/secret_settings.py
@@ -53,3 +53,4 @@ nosetests.xml
 
 # PyCharm config
 .idea
+
