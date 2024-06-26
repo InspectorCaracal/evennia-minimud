@@ -181,7 +181,7 @@ class Object(ObjectParent, DefaultObject):
         Make sure that wielded weapons are unwielded.
         """
         if self in dropper.wielding:
-            dropper.unwield(self)
+            dropper.at_unwield(self)
         super().at_drop(dropper, **kwargs)
 
 
