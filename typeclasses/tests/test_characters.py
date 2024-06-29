@@ -1,6 +1,7 @@
 """
 Tests for custom character logic
 """
+
 from unittest.mock import MagicMock
 from evennia.utils.test_resources import EvenniaTest
 

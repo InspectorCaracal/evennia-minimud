@@ -2,6 +2,7 @@
 Tests for smithing recipes
 
 """
+
 from evennia.utils.test_resources import EvenniaTest
 from evennia.contrib.game_systems.crafting import crafting
 from world.recipes import smithing

@@ -14,6 +14,7 @@ from .objects import ObjectParent
 _IMMOBILE = ("sitting", "lying down", "unconscious")
 _MAX_CAPACITY = 10
 
+
 class Character(ObjectParent, ClothedCharacter):
     """
     The base typeclass for all characters, both player characters and NPCs
@@ -75,10 +76,12 @@ class Character(ObjectParent, ClothedCharacter):
     def defense(self, damage_type=None):
         """
         Get the total armor defense from equipped items and natural defenses
-        
+
         The damage_type keyword is unused by default.
         """
-        return sum([obj.attributes.get("armor", 0) for obj in get_worn_clothes(self) + [self]])
+        return sum(
+            [obj.attributes.get("armor", 0) for obj in get_worn_clothes(self) + [self]]
+        )
 
     def at_object_creation(self):
         # basic stats
@@ -359,7 +362,9 @@ class PlayerCharacter(Character):
         # check if we have any statuses that prevent us from moving
         if len([obj for obj in self.contents if not obj.db.worn]) > _MAX_CAPACITY:
             self.msg("You can't carry any more things.")
-            source_location.msg(f"{self.get_display_name(source_location)} can't carry any more things.")
+            source_location.msg(
+                f"{self.get_display_name(source_location)} can't carry any more things."
+            )
             return False
         return super().at_pre_object_receive(object, source_location, **kwargs)
 

@@ -4,6 +4,7 @@ Room
 Rooms are simple containers that has no location of their own.
 
 """
+
 from evennia.utils import create, iter_to_str, logger
 from evennia.objects.objects import DefaultRoom
 from evennia.contrib.grid.xyzgrid.xyzroom import XYZRoom

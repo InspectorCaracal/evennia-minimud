@@ -10,6 +10,7 @@ the other types, you can do so by adding this as a multiple
 inheritance.
 
 """
+
 from random import randint
 from evennia.prototypes import spawner, prototypes
 from evennia.objects.objects import DefaultObject

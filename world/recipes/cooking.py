@@ -12,7 +12,8 @@ class FruitSaladRecipe(SkillRecipe):
     name = "fruit salad"
     tool_tags = ["knife"]
     consumable_tags = ["fruit", "fruit", "fruit"]
-    output_prototypes = [        {
+    output_prototypes = [
+        {
             "key": "fruit salad",
             "desc": "A colorful medley of chopped-up fruits.",
             "tags": [
@@ -22,6 +23,7 @@ class FruitSaladRecipe(SkillRecipe):
             "value": 3,
         }
     ]
+
 
 class CookedMeat(SkillRecipe):
     skill = ("cooking", 0)
@@ -53,7 +55,7 @@ class MeatPieRecipe(SkillRecipe):
 
     name = "meat pie"
     tool_tags = ["oven"]
-    consumable_tags = ["meat","meat","pie crust"]
+    consumable_tags = ["meat", "meat", "pie crust"]
     output_prototypes = [
         {
             "key": "slice of meat pie",
@@ -64,7 +66,7 @@ class MeatPieRecipe(SkillRecipe):
             "energy": 5,
             "value": 5,
         }
-    ]*6
+    ] * 6
 
 
 class BerryPieRecipe(SkillRecipe):
@@ -77,7 +79,7 @@ class BerryPieRecipe(SkillRecipe):
 
     name = "mixed berry pie"
     tool_tags = ["oven"]
-    consumable_tags = ["berry","berry","berry","berry","berry","pie crust"]
+    consumable_tags = ["berry", "berry", "berry", "berry", "berry", "pie crust"]
     output_prototypes = [
         {
             "key": "slice of mixed berry pie",
@@ -88,7 +90,8 @@ class BerryPieRecipe(SkillRecipe):
             "energy": 5,
             "value": 5,
         }
-    ]*6
+    ] * 6
+
 
 class ApplePieRecipe(SkillRecipe):
     """
@@ -100,7 +103,7 @@ class ApplePieRecipe(SkillRecipe):
 
     name = "apple pie"
     tool_tags = ["oven"]
-    consumable_tags = ["apple","apple","pie crust"]
+    consumable_tags = ["apple", "apple", "pie crust"]
     output_prototypes = [
         {
             "key": "slice of apple pie",
@@ -111,7 +114,8 @@ class ApplePieRecipe(SkillRecipe):
             "energy": 5,
             "value": 5,
         }
-    ]*6
+    ] * 6
+
 
 class PieCrustRecipe(SkillRecipe):
     """

@@ -58,9 +58,7 @@ MAP_KEY = {
     '"': {
         "biome": "grass",
         "desc": "A grassy meadow.",
-        "gathers": (
-            ("BERRY_BUSH", 3),
-        ),
+        "gathers": (("BERRY_BUSH", 3),),
         "node cap": 10,
         "mobs": (("DOE_DEER", 3), ("STAG_DEER", 1), ("PHEASANT", 10)),
         "mob cap": 15,
@@ -74,8 +72,8 @@ MAP_KEY = {
         "biome": "mountains",
         "desc": "The ground slopes sharply, littered with rocks and boulders.",
         "gathers": (
-        ("IRON_ORE_NODE", 1),
-        ("COPPER_ORE_NODE", 5),
+            ("IRON_ORE_NODE", 1),
+            ("COPPER_ORE_NODE", 5),
             ("BERRY_BUSH", 1),
         ),
         "node cap": 25,
