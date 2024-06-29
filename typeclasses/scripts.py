@@ -171,6 +171,26 @@ class CombatScript(Script):
         self.delete()
 
 
+def get_or_create_combat_script(location):
+    """
+    A helper function to find the current combat script in a location, or create
+    a new combat script if one isn't already present.
+
+    Args:
+        location (Room): The location being checked for a combat instance.
+
+    Returns:
+        script (CombatScript): The combat script attached to the given location.
+    """
+    if not (combat_script := location.scripts.get("combat")):
+        # there's no combat instance; start one
+        location.scripts.add(CombatScript, key="combat")
+        combat_script = location.scripts.get("combat")
+
+    combat_script = combat_script[0]
+    return combat_script
+
+
 class RestockScript(Script):
     """
     A script for a shop room that periodically restocks its inventory.
