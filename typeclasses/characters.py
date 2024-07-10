@@ -488,6 +488,7 @@ class NPC(Character):
                 combat_script = combat_script[0]
                 if not combat_script.remove_combatant(self):
                     # something went wrong...
+                    logger.log_err(f"Could not remove defeated NPC from combat! NPC: {self.name} (#{self.id}) Location: {self.location.name} (#{self.location.id})")
                     return
                 # create loot drops
                 objs = spawn(*list(self.db.drops))
