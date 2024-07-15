@@ -156,6 +156,7 @@ class CmdWield(Command):
             hands = [hand for hand in caller.free_hands if self.hand in hand]
             if not hands:
                 self.msg(f"You do not have a free {self.hand}.")
+                return
 
             # grab the top hand option
             hand = hands[0]
