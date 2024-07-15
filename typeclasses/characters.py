@@ -214,11 +214,12 @@ class Character(ObjectParent, ClothedCharacter):
             for hand in hands:
                 wielded[hand] = weapon
         else:
-            # check handedness first, then find a hand
-            if main_hand := self.db.handedness:
-                hand = main_hand if main_hand in free else free[0]
-            else:
-                hand = free[0]
+            if not hand:
+                # check handedness first, then find a hand
+                if main_hand := self.db.handedness:
+                    hand = main_hand if main_hand in free else free[0]
+                else:
+                    hand = free[0]
             # put the weapon as wielded in the hand
             hands = [hand]
             wielded[hand] = weapon
