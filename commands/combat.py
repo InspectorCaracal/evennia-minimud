@@ -157,8 +157,10 @@ class CmdWield(Command):
             if not hands:
                 self.msg(f"You do not have a free {self.hand}.")
 
-        # grab the top hand option
-        hand = hands[0]
+            # grab the top hand option
+            hand = hands[0]
+        else:
+            hand = None
 
         weapon = caller.search(self.weapon, location=caller)
         if not weapon:
