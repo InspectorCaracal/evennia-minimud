@@ -7,7 +7,7 @@ authors = [
 ]
 dependencies = [
     # General
-    "evennia >= 4.0, <5.0",
+    "evennia >= 4.2, <5.0",
     'pywin32; sys_platform=="win32"',
 
     # contrib requirements

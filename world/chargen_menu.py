@@ -209,7 +209,8 @@ def _check_desc(caller, raw_string, **kwargs):
     In case the player went back to change earlier decisions, this allows players to skip the
     "enter desc" step if they already did it and go straight to confirming.
     """
-    if caller.new_char.db.desc:
+    # NOTE: this needs a more robust way to check, since default is no longer left empty
+    if caller.new_char.db.desc != "This is a character.":
         return "menunode_confirm_desc"
     else:
         return "menunode_set_desc"
@@ -382,7 +383,9 @@ def menunode_end(caller, raw_string):
         obj.wear(char, True, quiet=True)
     # get start location
     if plaza := char.search("East half of a plaza", global_search=True, quiet=True):
+        # set home and prelogout locations
         char.home = plaza[0]
+        char.db.prelogout_location = plaza[0]
 
     # clear in-progress status
     caller.new_char.attributes.remove("chargen_step")
