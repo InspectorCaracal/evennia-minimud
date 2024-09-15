@@ -7,11 +7,8 @@ authors = [
 ]
 dependencies = [
     # General
-    "evennia >= 4.2, <5.0",
+    "evennia[extra] >= 4.2, <5.0",
     'pywin32; sys_platform=="win32"',
-
-    # contrib requirements
-    "scipy == 1.9.3"
 ]
 
 [tool.setuptools]
