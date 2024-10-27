@@ -329,7 +329,7 @@ ANGRY_BEAR = {
     },
     "exp_reward": 10,
     # randomly generate a list of drop prototype keys when the mob is spawned
-    "drops": lambda: ["BEAR_MEAT"] * randint(3, 5) + ["ANIMAL_HIDE"] * randint(0, 5),
+    "drops": lambda: ["RAW_MEAT"] * randint(3, 5) + ["ANIMAL_HIDE"] * randint(0, 5),
     "can_attack": True,
 }
 
