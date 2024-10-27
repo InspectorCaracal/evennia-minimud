@@ -140,7 +140,8 @@ class Character(ObjectParent, ClothedCharacter):
         """
         # apply armor damage reduction
         damage -= self.defense(damage_type)
-        self.traits.hp.current -= max(damage, 0)
+        damage = max(0, damage)
+        self.traits.hp.current -= damage
         self.msg(f"You take {damage} damage from {attacker.get_display_name(self)}.")
         attacker.msg(f"You deal {damage} damage to {self.get_display_name(attacker)}.")
         if self.traits.hp.value <= 0:
