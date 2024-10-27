@@ -8,6 +8,7 @@ from evennia.contrib.game_systems.clothing.clothing import (
     get_worn_clothes,
 )
 from evennia.contrib.game_systems.cooldowns import CooldownHandler
+from evennia.prototypes.spawner import spawn
 
 from .objects import ObjectParent
 
