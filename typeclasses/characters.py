@@ -152,7 +152,10 @@ class Character(ObjectParent, ClothedCharacter):
             self.traits.hp.rate = 0
             if self.in_combat:
                 combat = self.location.scripts.get("combat")[0]
-                combat.remove_combatant(self)
+                if not combat.remove_combatant(self):
+                    # something went wrong...
+                    logger.log_err(f"Could not remove defeated character from combat! Character: {self.name} (#{self.id}) Location: {self.location.name} (#{self.location.id})")
+                    return
 
     def at_emote(self, message, **kwargs):
         """
@@ -461,7 +464,7 @@ class NPC(Character):
         Respond to the arrival of a character
         """
         if "aggressive" in self.attributes.get("react_as", ""):
-            delay(1, self.enter_combat, chara)
+            delay(0.1, self.enter_combat, chara)
 
     def at_character_depart(self, chara, destination, **kwargs):
         """
@@ -486,19 +489,13 @@ class NPC(Character):
 
         if self.traits.hp.value <= 0:
             # we've been defeated!
-            if combat_script := self.location.scripts.get("combat"):
-                combat_script = combat_script[0]
-                if not combat_script.remove_combatant(self):
-                    # something went wrong...
-                    logger.log_err(f"Could not remove defeated NPC from combat! NPC: {self.name} (#{self.id}) Location: {self.location.name} (#{self.location.id})")
-                    return
-                # create loot drops
-                objs = spawn(*list(self.db.drops))
-                for obj in objs:
-                    obj.location = self.location
-                # delete ourself
-                self.delete()
-                return
+            # create loot drops
+            objs = spawn(*list(self.db.drops))
+            for obj in objs:
+                obj.location = self.location
+            # delete ourself
+            self.delete()
+            return
 
         if "timid" in self.attributes.get("react_as", ""):
             self.at_emote("flees!")
@@ -517,7 +514,7 @@ class NPC(Character):
             return
 
         threshold = self.attributes.get("flee_at", 25)
-        if self.traits.hp.value <= 25:
+        if self.traits.hp.value <= threshold:
             self.execute_cmd("flee")
 
         # change target to the attacker
@@ -555,7 +552,7 @@ class NPC(Character):
 
     def attack(self, target, weapon, **kwargs):
         # can't attack if we're not in combat, or if we're fleeing
-        if not self.in_combat or self.db.fleeing:
+        if not self.in_combat or self.db.fleeing or self.tags.has("unconscious"):
             return
 
         # if target is not set, use stored target
