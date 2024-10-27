@@ -36,7 +36,7 @@ class CombatScript(Script):
         Returns a list of all combatants, regardless of alliance.
         """
         a, b = self.teams
-        return a + b
+        return [obj for obj in a + b if obj]
 
     @property
     def active(self):
