@@ -1,7 +1,5 @@
 # Evennia: The RPG
 
-**Play Here** https://example.com
-
 ### What is this?
 
 Evennia is a game engine/framework for making online multiplayer text games, such as MUDs.
@@ -24,6 +22,11 @@ You are absolutely correct!
 
 Since my goal was to write as little custom code as possible, most of the mechanics are as minimal as I could get away with. But the code is all here and free for the taking - if you like part of it but want it to be better, make it better!
 
+### This is great! Can I buy you a coffee?
+
+(Thank you to everyone who has asked this!)
+
+I do have a [ko-fi page](https://ko-fi.com/glassdragonstudios) set up. I appreciate it!
 
 ## Installation and Setup
 
